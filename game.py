@@ -6,6 +6,26 @@ class Igralec(pygame.sprite.Sprite):
 		self.image= pygame.Surface((50,50))
 		self.image.fill((200,0,0))
 		self.rect = self.image.get_rect()
+		self.smeri={
+			pygame.K_UP:False,
+			pygame.K_DOWN:False,
+			pygame.K_RIGHT:False,
+			pygame.K_LEFT:False
+			
+		}
+	def oznazi_pritisk(self, smer, status):
+		self.smeri[smer]=status
+
+	def update(self):
+		if self.smeri[pygame.K_DOWN]:
+			igralec.premik(0,3)
+		if self.smeri[pygame.K_UP]:
+			igralec.premik(0,-3)
+		if self.smeri[pygame.K_LEFT]:
+			igralec.premik(-3,0)
+		if  self.smeri[pygame.K_RIGHT]:
+			igralec.premik(3,0)
+
 	def premik(self, x, y):
 		self.rect.x+=x
 		self.rect.y+=y
@@ -26,15 +46,12 @@ while igramo:
 		if dogodek.type ==pygame.QUIT:
 			igramo=False
 		elif dogodek.type==pygame.KEYDOWN:
-			if dogodek.key==pygame.K_DOWN:
-				igralec.premik(0,10)
-			elif  dogodek.key==pygame.K_UP:
-				igralec.premik(0,-10)
-			elif  dogodek.key==pygame.K_LEFT:
-				igralec.premik(-10,0)
-			elif  dogodek.key==pygame.K_RIGHT:
-				igralec.premik(10,0)
-	ekran.fill((80,130,0))		
+			igralec.oznazi_pritisk(dogodek.key, True)
+		elif dogodek.type==pygame.KEYUP:
+			igralec.oznazi_pritisk(dogodek.key, False)
+	
+	igra_skupina.update()
+	ekran.fill((160,100,105))	#hell'o'kity roza (160,100,105)
 	igra_skupina.draw(ekran)
 	pygame.display.flip()
 
